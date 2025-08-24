@@ -1,0 +1,5 @@
+{
+  "name": "AI ABC Analysis Assistant",
+  "description": "An application to assist educators in conducting ABC analysis of student behavior, with AI-powered feedback to improve intervention strategies.",
+  "requestFramePermissions": []
+}
