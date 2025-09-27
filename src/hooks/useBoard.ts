@@ -18,6 +18,7 @@ interface BoardState {
   players: Player[];
   teamCounts: Record<PlayerTeam, number>;
   drawings: any[];
+  strategyName: string;
 }
 
 export const useBoard = () => {
@@ -33,12 +34,17 @@ export const useBoard = () => {
     players: [],
     teamCounts: { red: 0, blue: 0, yellow: 0, ball: 0 },
     drawings: [],
+    strategyName: '',
   });
 
-  const { selectedField, players, teamCounts, drawings } = state;
+  const { selectedField, players, teamCounts, drawings, strategyName } = state;
 
   const setSelectedField = useCallback((field: FieldType) => {
     setState({ ...state, selectedField: field });
+  }, [state, setState]);
+
+  const setStrategyName = useCallback((name: string) => {
+    setState({ ...state, strategyName: name });
   }, [state, setState]);
 
   const addPlayer = useCallback((team: PlayerTeam, shape: PlayerShape, number?: number) => {
@@ -93,6 +99,7 @@ export const useBoard = () => {
         players: [],
         teamCounts: { red: 0, blue: 0, yellow: 0, ball: 0 },
         drawings: [],
+        strategyName: '',
       });
     }
   }, [state, setState]);
@@ -127,5 +134,7 @@ export const useBoard = () => {
     redo,
     canUndo,
     canRedo,
+    strategyName,
+    setStrategyName,
   };
 };

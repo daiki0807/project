@@ -29,6 +29,8 @@ export const Board: React.FC = () => {
     redo,
     canUndo,
     canRedo,
+    strategyName,
+    setStrategyName,
   } = useBoard();
 
   const {
@@ -98,7 +100,16 @@ export const Board: React.FC = () => {
         </div>
 
         <div className="bg-white p-2 sm:p-4 rounded-lg shadow-md mb-4">
-          <div className="flex items-center justify-between flex-wrap gap-2">
+          <input
+            type="text"
+            value={strategyName}
+            onChange={(e) => setStrategyName(e.target.value)}
+            placeholder="作戦名を入力"
+            className="w-full p-2 border rounded-lg"
+          />
+        </div>
+
+        <div className="bg-white p-2 sm:p-4 rounded-lg shadow-md mb-4">
             <HistoryControls
               onUndo={undo}
               onRedo={redo}
@@ -106,7 +117,7 @@ export const Board: React.FC = () => {
               canRedo={canRedo}
             />
             <div className="flex items-center gap-2">
-              <ExportButton onClick={() => fieldRef.current && exportToPDF(fieldRef.current, selectedField)} />
+              <ExportButton onClick={() => fieldRef.current && exportToPDF(fieldRef.current, selectedField, strategyName)} />
               <button
                 onClick={reset}
                 className="p-2 rounded-lg bg-red-100 text-red-600 hover:bg-red-200 transition-colors text-xs sm:text-base whitespace-nowrap"
@@ -115,7 +126,6 @@ export const Board: React.FC = () => {
               </button>
             </div>
           </div>
-        </div>
 
         <div className="bg-white p-2 sm:p-4 rounded-lg shadow-md">
           <div 

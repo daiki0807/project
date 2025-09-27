@@ -23,7 +23,7 @@ const getFieldName = (fieldType: FieldType): string => {
   }
 };
 
-export const exportToPDF = async (fieldRef: HTMLDivElement, fieldType: FieldType) => {
+export const exportToPDF = async (fieldRef: HTMLDivElement, fieldType: FieldType, strategyName: string) => {
   try {
     const canvas = await html2canvas(fieldRef, {
       scale: 2,
@@ -40,6 +40,15 @@ export const exportToPDF = async (fieldRef: HTMLDivElement, fieldType: FieldType
     const pdfWidth = pdf.internal.pageSize.getWidth();
     const pdfHeight = pdf.internal.pageSize.getHeight();
     const margin = 10;
+
+    // Add custom Japanese font
+    pdf.addFont('./fonts/NotoSansJP-Regular.ttf', 'NotoSansJP', 'normal');
+    pdf.setFont('NotoSansJP');
+
+    if (strategyName) {
+      pdf.setFontSize(16);
+      pdf.text(strategyName, pdfWidth / 2, margin, { align: 'center' });
+    }
     
     const imageWidth = pdfWidth - (margin * 2);
     const imageHeight = imageWidth / aspectRatio;
