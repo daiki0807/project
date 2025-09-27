@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 import { PlayerTeam, PlayerShape, FieldType } from '../types';
 import { calculateInitialPosition } from '../utils/playerPosition';
 import { useHistory } from './useHistory';
@@ -13,13 +13,31 @@ interface Player {
   number?: number;
 }
 
-interface BoardState {
+export interface BoardState {
   selectedField: FieldType;
   players: Player[];
   teamCounts: Record<PlayerTeam, number>;
   drawings: any[];
   strategyName: string;
 }
+
+const defaultState: BoardState = {
+  selectedField: 'soccer',
+  players: [],
+  teamCounts: { red: 0, blue: 0, yellow: 0, ball: 0 },
+  drawings: [],
+  strategyName: '',
+};
+
+const getInitialState = (): BoardState => {
+  const savedState = localStorage.getItem('boardState');
+  if (savedState) {
+    const parsedState = JSON.parse(savedState);
+    // Add versioning or validation if state shape changes over time
+    return { ...defaultState, ...parsedState };
+  }
+  return defaultState;
+};
 
 export const useBoard = () => {
   const {
@@ -29,15 +47,13 @@ export const useBoard = () => {
     redo,
     canUndo,
     canRedo,
-  } = useHistory<BoardState>({
-    selectedField: 'soccer',
-    players: [],
-    teamCounts: { red: 0, blue: 0, yellow: 0, ball: 0 },
-    drawings: [],
-    strategyName: '',
-  });
+  } = useHistory<BoardState>(getInitialState());
 
   const { selectedField, players, teamCounts, drawings, strategyName } = state;
+
+  useEffect(() => {
+    localStorage.setItem('boardState', JSON.stringify(state));
+  }, [state]);
 
   const setSelectedField = useCallback((field: FieldType) => {
     setState({ ...state, selectedField: field });
